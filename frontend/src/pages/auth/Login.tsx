@@ -84,7 +84,7 @@ export default function Login() {
                   placeholder="admin@example.com"
                   className="pl-10 bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-indigo-500/50 focus-visible:border-indigo-500 h-11 transition-all"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                   disabled={isLoading}
                   autoComplete="email"
                   required
@@ -105,7 +105,7 @@ export default function Login() {
                   placeholder="••••••••"
                   className="pl-10 bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-indigo-500/50 focus-visible:border-indigo-500 h-11 transition-all"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   disabled={isLoading}
                   autoComplete="current-password"
                   required
