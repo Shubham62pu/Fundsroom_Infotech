@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 
   { path: '/users', element: <UserList /> },
 
-  { path: '/', element: <Navigate to="/dashboard" replace /> },
+  { path: '/', element: <Navigate to="/login" replace /> },
   { path: '*', element: <div className="p-4">404 Not Found</div> },
 ]);
 
