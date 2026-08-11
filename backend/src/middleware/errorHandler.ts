@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Prisma } from '@prisma/client';
+
 
 export class AppError extends Error {
   statusCode: number;
@@ -24,15 +24,16 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
     return;
   }
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    if (err.code === 'P2002') {
-      const target = (err.meta?.target as string[]) || [];
+  if (err.name === 'PrismaClientKnownRequestError') {
+    const prismaError = err as any;
+    if (prismaError.code === 'P2002') {
+      const target = (prismaError.meta?.target as string[]) || [];
       res.status(409).json({
         error: `Duplicate value for: ${target.join(', ')}`,
       });
       return;
     }
-    if (err.code === 'P2025') {
+    if (prismaError.code === 'P2025') {
       res.status(404).json({ error: 'Record not found' });
       return;
     }
