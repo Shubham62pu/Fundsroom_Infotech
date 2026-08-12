@@ -1,22 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodSchema, ZodError } from 'zod';
+import { z, ZodError, ZodSchema } from 'zod';
 
 export const validate = (schema: ZodSchema) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse(req.body);
-      next();
+      await schema.parseAsync({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      });
+      return next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const zodError = error as any;
-        const formattedErrors = zodError.errors.map((e: any) => ({
-          field: e.path.join('.'),
-          message: e.message,
-        }));
-        res.status(400).json({ error: 'Validation failed', details: formattedErrors });
-        return;
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: (error as any).errors || (error as any).issues,
+        });
       }
-      next(error);
+      return next(error);
     }
   };
 };

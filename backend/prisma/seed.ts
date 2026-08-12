@@ -4,31 +4,24 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const saltRounds = 10;
+  const password = await bcrypt.hash('password123', 10);
 
   const users = [
-    { name: 'Admin User', email: 'admin@fundsroom.com', password: 'Admin@123', role: Role.ADMIN },
-    { name: 'Sales User', email: 'sales@fundsroom.com', password: 'Sales@123', role: Role.SALES },
-    { name: 'Warehouse User', email: 'warehouse@fundsroom.com', password: 'Warehouse@123', role: Role.WAREHOUSE },
-    { name: 'Accounts User', email: 'accounts@fundsroom.com', password: 'Accounts@123', role: Role.ACCOUNTS },
+    { name: 'Admin User', email: 'admin@erp.local', password, role: Role.ADMIN },
+    { name: 'Sales User', email: 'sales@erp.local', password, role: Role.SALES },
+    { name: 'Warehouse User', email: 'warehouse@erp.local', password, role: Role.WAREHOUSE },
+    { name: 'Accounts User', email: 'accounts@erp.local', password, role: Role.ACCOUNTS },
   ];
 
+  console.log('Seeding users...');
   for (const user of users) {
-    const hashedPassword = await bcrypt.hash(user.password, saltRounds);
-    await prisma.user.upsert({
+    const createdUser = await prisma.user.upsert({
       where: { email: user.email },
       update: {},
-      create: {
-        name: user.name,
-        email: user.email,
-        password: hashedPassword,
-        role: user.role,
-      },
+      create: user,
     });
-    console.log(`Seeded user: ${user.email} (${user.role})`);
+    console.log(`Created/Updated user: ${createdUser.email} with role ${createdUser.role} (password: password123)`);
   }
-
-  console.log('Seeding complete.');
 }
 
 main()

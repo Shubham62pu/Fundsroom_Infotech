@@ -13,33 +13,40 @@ import ChallanDetail from '../pages/challans/ChallanDetail';
 import InvoiceList from '../pages/invoices/InvoiceList';
 import InvoiceDetail from '../pages/invoices/InvoiceDetail';
 import UserList from '../pages/users/UserList';
-
+import { AppLayout } from '../components/layout/AppLayout';
 const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
-  { path: '/dashboard', element: <Dashboard /> },
   
-  { path: '/customers', element: <CustomerList /> },
-  { path: '/customers/new', element: <CustomerForm /> },
-  { path: '/customers/:id/edit', element: <CustomerForm /> },
-  { path: '/customers/:id', element: <CustomerDetail /> },
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { path: 'dashboard', element: <Dashboard /> },
+      
+      { path: 'customers', element: <CustomerList /> },
+      { path: 'customers/new', element: <CustomerForm /> },
+      { path: 'customers/:id/edit', element: <CustomerForm /> },
+      { path: 'customers/:id', element: <CustomerDetail /> },
 
-  { path: '/products', element: <ProductList /> },
-  { path: '/products/new', element: <ProductForm /> },
-  { path: '/products/:id/edit', element: <ProductForm /> },
+      { path: 'products', element: <ProductList /> },
+      { path: 'products/new', element: <ProductForm /> },
+      { path: 'products/:id/edit', element: <ProductForm /> },
 
-  { path: '/stock-movements', element: <StockMovements /> },
+      { path: 'stock-movements', element: <StockMovements /> },
 
-  { path: '/challans', element: <ChallanList /> },
-  { path: '/challans/new', element: <ChallanForm /> },
-  { path: '/challans/:id/edit', element: <ChallanForm /> },
-  { path: '/challans/:id', element: <ChallanDetail /> },
+      { path: 'challans', element: <ChallanList /> },
+      { path: 'challans/new', element: <ChallanForm /> },
+      { path: 'challans/:id/edit', element: <ChallanForm /> },
+      { path: 'challans/:id', element: <ChallanDetail /> },
 
-  { path: '/invoices', element: <InvoiceList /> },
-  { path: '/invoices/:id', element: <InvoiceDetail /> },
+      { path: 'invoices', element: <InvoiceList /> },
+      { path: 'invoices/:id', element: <InvoiceDetail /> },
 
-  { path: '/users', element: <UserList /> },
-
-  { path: '/', element: <Navigate to="/login" replace /> },
+      { path: 'users', element: <UserList /> },
+      { path: '/', element: <Navigate to="/dashboard" replace /> },
+    ],
+  },
+  
   { path: '*', element: <div className="p-4">404 Not Found</div> },
 ]);
 

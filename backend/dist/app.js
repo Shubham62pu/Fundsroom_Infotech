@@ -12,10 +12,14 @@ const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use((0, cors_1.default)({ origin: allowedOrigin }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+// Routes
+const routes_1 = __importDefault(require("./modules/auth/routes"));
 // Health check
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
 });
+// API Routes
+app.use('/api/auth', routes_1.default);
 // Error handler (must be last)
 app.use(errorHandler_1.errorHandler);
 exports.default = app;
