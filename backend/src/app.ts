@@ -1,17 +1,20 @@
 import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler';
+import authRoutes from './modules/auth/routes';
 
 const app = express();
 
 // Middleware
-const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
-app.use(cors({ origin: allowedOrigin }));
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow all origins in development; in production lock this down via FRONTEND_URL
+    callback(null, true);
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Routes
-import authRoutes from './modules/auth/routes';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -20,7 +23,6 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
-
 
 // Error handler (must be last)
 app.use(errorHandler);

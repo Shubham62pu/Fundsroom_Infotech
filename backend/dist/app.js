@@ -6,14 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const errorHandler_1 = require("./middleware/errorHandler");
+const routes_1 = __importDefault(require("./modules/auth/routes"));
 const app = (0, express_1.default)();
 // Middleware
-const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
-app.use((0, cors_1.default)({ origin: allowedOrigin }));
+app.use((0, cors_1.default)({
+    origin: (origin, callback) => {
+        // Allow all origins in development; in production lock this down via FRONTEND_URL
+        callback(null, true);
+    },
+    credentials: true,
+}));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-// Routes
-const routes_1 = __importDefault(require("./modules/auth/routes"));
 // Health check
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });

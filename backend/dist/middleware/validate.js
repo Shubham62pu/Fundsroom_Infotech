@@ -13,10 +13,12 @@ const validate = (schema) => {
             return next();
         }
         catch (error) {
-            if (error instanceof zod_1.ZodError) {
+            // Zod v4 uses .issues (renamed from .errors in v3)
+            if (error instanceof zod_1.ZodError || error?.name === 'ZodError') {
+                const zodError = error;
                 return res.status(400).json({
                     error: 'Validation failed',
-                    details: error.errors || error.issues,
+                    details: zodError.issues ?? zodError.errors ?? [],
                 });
             }
             return next(error);
